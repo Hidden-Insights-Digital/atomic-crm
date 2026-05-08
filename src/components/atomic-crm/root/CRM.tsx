@@ -59,6 +59,9 @@ import { ContactListMobile } from "../contacts/ContactList.tsx";
 import { ContactShow } from "../contacts/ContactShow.tsx";
 import { CompanyShow } from "../companies/CompanyShow.tsx";
 import { NoteShowPage } from "../notes/NoteShowPage.tsx";
+// ── CUSTOM: Import TaskList for Tasks tab ────────────────
+import TaskList from "../tasks/TaskList";
+// ── END CUSTOM ───────────────────────────────────────────
 
 const defaultStore = localStorageStore(undefined, "CRM");
 
@@ -270,7 +273,9 @@ const DesktopAdmin = (
       <Resource name="companies" {...companies} />
       <Resource name="contact_notes" />
       <Resource name="deal_notes" />
-      <Resource name="tasks" />
+      {/* ── CUSTOM: Added list prop to tasks Resource ── */}
+      <Resource name="tasks" list={TaskList} />
+      {/* ── END CUSTOM ── */}
       <Resource name="sales" {...sales} />
       <Resource name="tags" />
     </Admin>
