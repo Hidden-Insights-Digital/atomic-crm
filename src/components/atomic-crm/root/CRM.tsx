@@ -63,7 +63,8 @@ import { NoteShowPage } from "../notes/NoteShowPage.tsx";
 import TaskList from "../tasks/TaskList";
 // ── END CUSTOM ───────────────────────────────────────────
 // ── CUSTOM: Import Insights ──────────────────────────────
-import { InsightsList, InsightsShow } from '../insights';
+import { InsightsList } from '../insights/InsightsList';
+import { InsightsShow } from '../insights/InsightsShow';
 // ── END CUSTOM ───────────────────────────────────────────
 
 const defaultStore = localStorageStore(undefined, "CRM");
