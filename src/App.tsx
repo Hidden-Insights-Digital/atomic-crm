@@ -35,6 +35,7 @@ const wrappedDataProvider = createWrappedDataProvider(
  *    />
  * );
  */
-const App = () => <CRM />;
+//const App = () => <CRM />;
+const App = () => <CRM dataProvider={wrappedDataProvider} />;
 
 export default App;
