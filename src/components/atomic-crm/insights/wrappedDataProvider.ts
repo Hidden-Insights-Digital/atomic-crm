@@ -1,11 +1,12 @@
 import type { DataProvider } from 'ra-core';
+import type { CrmDataProvider } from '../providers/types';
 
 const INSIGHTS_RESOURCE = 'insights_place_company_links';
 
 export const createWrappedDataProvider = (
-  crmProvider: DataProvider,
+  crmProvider: CrmDataProvider,
   insightsProvider: DataProvider
-): DataProvider => ({
+): CrmDataProvider => ({
   ...crmProvider,
   getList: (resource, params) =>
     resource === INSIGHTS_RESOURCE
