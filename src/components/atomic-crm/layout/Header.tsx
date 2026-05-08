@@ -24,6 +24,10 @@ const Header = () => {
     currentPath = "/companies";
   } else if (matchPath("/deals/*", location.pathname)) {
     currentPath = "/deals";
+  // ── CUSTOM: Added Tasks path detection ──────────────────
+  } else if (matchPath("/tasks/*", location.pathname)) {
+    currentPath = "/tasks";
+  // ── END CUSTOM ───────────────────────────────────────────
   } else {
     currentPath = false;
   }
@@ -78,6 +82,15 @@ const Header = () => {
                     to="/deals"
                     isActive={currentPath === "/deals"}
                   />
+                  {/* ── CUSTOM: Added Tasks navigation tab ── */}
+                  <NavigationTab
+                    label={translate("resources.tasks.name", {
+                      smart_count: 2,
+                    })}
+                    to="/tasks"
+                    isActive={currentPath === "/tasks"}
+                  />
+                  {/* ── END CUSTOM ── */}
                 </nav>
               </div>
               <div className="flex items-center">
