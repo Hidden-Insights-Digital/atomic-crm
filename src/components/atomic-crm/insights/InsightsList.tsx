@@ -1,8 +1,9 @@
 // src/components/atomic-crm/insights/InsightsList.tsx
 
 import { startOfMonth, startOfWeek, subMonths } from 'date-fns';
-import { Calendar, LayoutGrid, TrendingUp } from 'lucide-react';
+import { Calendar, LayoutGrid } from 'lucide-react';
 import {
+  FilterLiveForm,
   RecordContextProvider,
   useListContext,
   useLocaleState,
@@ -16,34 +17,40 @@ import { ReferenceField } from '@/components/admin/reference-field';
 import { TextField } from '@/components/admin/text-field';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Badge } from '@/components/ui/badge';
 
 import { FilterCategory } from '../filters/FilterCategory';
 import { ActiveFilterButton } from '../misc/ActiveFilterButton';
 import { ResponsiveFilters } from '../misc/ResponsiveFilters';
 import { TopToolbar } from '../layout/TopToolbar';
+import { SearchInput } from '@/components/admin/search-input';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const TIERS = [
-  { value: '1', label: 'Tier 1' },
-  { value: '2', label: 'Tier 2' },
-  { value: '3', label: 'Tier 3' },
-  { value: '4', label: 'Tier 4' },
+  { value: 'green',  label: 'Tier 1' },
+  { value: 'yellow', label: 'Tier 2' },
+  { value: 'orange', label: 'Tier 3' },
+  { value: 'red',    label: 'Tier 4' },
 ];
 
-const ASSESSMENT_STATUSES = [
-  { value: 'pending',   label: 'Pending' },
-  { value: 'complete',  label: 'Complete' },
-  { value: 'in_review', label: 'In Review' },
-];
+const TIER_STYLES: Record<string, { dot: string; bg: string; text: string }> = {
+  green:  { dot: 'bg-green-500',  bg: 'bg-green-100 dark:bg-green-900/40',   text: 'text-green-800 dark:text-green-300'  },
+  yellow: { dot: 'bg-yellow-400', bg: 'bg-yellow-100 dark:bg-yellow-900/40', text: 'text-yellow-800 dark:text-yellow-300' },
+  orange: { dot: 'bg-orange-500', bg: 'bg-orange-100 dark:bg-orange-900/40', text: 'text-orange-800 dark:text-orange-300' },
+  red:    { dot: 'bg-red-500',    bg: 'bg-red-100 dark:bg-red-900/40',       text: 'text-red-800 dark:text-red-300'       },
+};
 
-const tierVariant = (
-  tier: string | null,
-): 'default' | 'secondary' | 'outline' => {
-  if (tier === '1') return 'default';
-  if (tier === '2') return 'secondary';
-  return 'outline';
+const TierBadge = ({ tier }: { tier: string | null }) => {
+  if (!tier) return null;
+  const style = TIER_STYLES[tier];
+  if (!style) return null;
+  const label = TIERS.find(t => t.value === tier)?.label ?? tier;
+  return (
+    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium shrink-0 mr-4 ${style.bg} ${style.text}`}>
+      <span className={`w-1.5 h-1.5 rounded-full ${style.dot}`} />
+      {label}
+    </span>
+  );
 };
 
 // ── List ──────────────────────────────────────────────────────────────────────
@@ -54,7 +61,6 @@ export const InsightsList = () => (
     actions={<InsightsListActions />}
     perPage={25}
     sort={{ field: 'snap_name', order: 'ASC' }}
-    filter={{ qualification_status: 'candidate' }}
   >
     <InsightsListLayout />
   </List>
@@ -64,9 +70,7 @@ export const InsightsList = () => (
 
 const InsightsListLayout = () => {
   const { isPending } = useListContext();
-
   if (isPending) return null;
-
   return (
     <div className="flex flex-row gap-8">
       <InsightsListFilter />
@@ -84,35 +88,32 @@ const InsightsListLayout = () => {
 
 const InsightsListActions = () => (
   <TopToolbar>
-    <SortButton fields={['snap_name', 'updated_at']} />
+    <SortButton fields={['snap_name', 'total_score', 'updated_at']} />
   </TopToolbar>
 );
 
 // ── Filter sidebar ────────────────────────────────────────────────────────────
 
 const InsightsListFilter = () => (
-  <ResponsiveFilters searchInput={{ placeholder: 'Search by name…' }}>
+  <ResponsiveFilters>
 
     <FilterCategory label="Tier" icon={<LayoutGrid size={16} />}>
-      {TIERS.map((tier) => (
-        <ToggleFilterButton
-          key={tier.value}
-          className="w-auto md:w-full justify-between h-10 md:h-8"
-          label={tier.label}
-          value={{ tier: tier.value }}
-        />
-      ))}
-    </FilterCategory>
-
-    <FilterCategory label="Assessment Status" icon={<TrendingUp size={16} />}>
-      {ASSESSMENT_STATUSES.map((s) => (
-        <ToggleFilterButton
-          key={s.value}
-          className="w-auto md:w-full justify-between h-10 md:h-8"
-          label={s.label}
-          value={{ assessment_status: s.value }}
-        />
-      ))}
+      {TIERS.map((tier) => {
+        const style = TIER_STYLES[tier.value];
+        return (
+          <ToggleFilterButton
+            key={tier.value}
+            className="w-auto md:w-full justify-between h-10 md:h-8"
+            label={
+              <span className="flex items-center gap-1.5">
+                <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${style.dot}`} />
+                {tier.label}
+              </span>
+            }
+            value={{ tier: tier.value }}
+          />
+        );
+      })}
     </FilterCategory>
 
     <FilterCategory label="Last Updated" icon={<Calendar size={16} />}>
@@ -162,14 +163,6 @@ const InsightsListFilterSummary = () => {
           className="w-auto justify-between h-8"
           label={tier.label}
           value={{ tier: tier.value }}
-        />
-      ))}
-      {ASSESSMENT_STATUSES.map((s) => (
-        <ActiveFilterButton
-          key={s.value}
-          className="w-auto justify-between h-8"
-          label={s.label}
-          value={{ assessment_status: s.value }}
         />
       ))}
       <ActiveFilterButton
@@ -236,10 +229,9 @@ const InsightRow = ({ record }: { record: any }) => {
 
   return (
     <Link
-      to={`/insights_place_company_links/${record.id}/show`}
+      to={`/insights/${record.id}/show`}
       className="flex flex-row items-center pl-4 pr-4 py-2 hover:bg-muted transition-colors first:rounded-t-xl last:rounded-b-xl"
     >
-      {/* Company name: live from companies table, fallback to snap_name */}
       <div className="flex-1 min-w-0">
         <div className="font-medium truncate">
           {record.crm_company_id ? (
@@ -254,18 +246,16 @@ const InsightRow = ({ record }: { record: any }) => {
             record.snap_name
           )}
         </div>
-        {record.assessment_status && (
-          <div className="text-sm text-muted-foreground capitalize">
-            {record.assessment_status.replace('_', ' ')}
-          </div>
-        )}
       </div>
 
-      {/* Tier badge */}
-      {record.tier && (
-        <Badge variant={tierVariant(record.tier)} className="shrink-0 mr-4">
-          Tier {record.tier}
-        </Badge>
+      {/* Coloured tier badge */}
+      <TierBadge tier={record.tier} />
+
+      {/* Score */}
+      {record.total_score != null && (
+        <div className="text-sm text-muted-foreground shrink-0 w-16 text-right mr-4">
+          {record.total_score}
+        </div>
       )}
 
       {/* Updated at */}
