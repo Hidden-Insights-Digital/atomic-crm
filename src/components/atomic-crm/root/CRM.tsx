@@ -282,7 +282,7 @@ const DesktopAdmin = (
       {/* ── END CUSTOM ── */}
       {/* ── CUSTOM: Added Insights resource ── */}
       <Resource
-        name="insights_place_company_links"
+        name="insights"
         list={InsightsList}
         show={InsightsShow}
         recordRepresentation="snap_name"
