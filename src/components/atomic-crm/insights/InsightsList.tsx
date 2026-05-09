@@ -3,7 +3,6 @@
 import { startOfMonth, startOfWeek, subMonths } from 'date-fns';
 import { Calendar, LayoutGrid } from 'lucide-react';
 import {
-  FilterLiveForm,
   RecordContextProvider,
   useListContext,
   useLocaleState,
@@ -22,7 +21,6 @@ import { FilterCategory } from '../filters/FilterCategory';
 import { ActiveFilterButton } from '../misc/ActiveFilterButton';
 import { ResponsiveFilters } from '../misc/ResponsiveFilters';
 import { TopToolbar } from '../layout/TopToolbar';
-import { SearchInput } from '@/components/admin/search-input';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
