@@ -29,8 +29,8 @@ const Header = () => {
     currentPath = "/tasks";
   // ── END CUSTOM ───────────────────────────────────────────
   // ── CUSTOM: Added Insights path detection ────────────────
-  } else if (matchPath("/insights_place_company_links/*", location.pathname)) {
-    currentPath = "/insights_place_company_links";
+  } else if (matchPath("/insights/*", location.pathname)) {
+    currentPath = "/insights";
   // ── END CUSTOM ───────────────────────────────────────────
   } else {
     currentPath = false;
@@ -82,8 +82,8 @@ const Header = () => {
                   {/* ── CUSTOM: Added Insights navigation tab ── */}
                   <NavigationTab
                     label="Insights"
-                    to="/insights_place_company_links"
-                    isActive={currentPath === "/insights_place_company_links"}
+                    to="/insights"
+                    isActive={currentPath === "/insights"}
                   />
                   {/* ── END CUSTOM ── */}
                   <NavigationTab
