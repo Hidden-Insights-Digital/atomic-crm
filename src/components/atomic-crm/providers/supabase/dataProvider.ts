@@ -353,6 +353,14 @@ const lifeCycleCallbacks: ResourceCallbacks[] = [
       return applyFullTextSearch(["name", "category", "description"])(params);
     },
   },
+    // #region CUSTOM: Tasks full-text search
+  {
+    resource: "tasks",
+    beforeGetList: async (params) => {
+      return applyFullTextSearch(["text"])(params);
+    },
+  },
+  // #endregion CUSTOM: Tasks full-text search
 ];
 
 export const getDataProvider = () => {

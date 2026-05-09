@@ -62,6 +62,10 @@ import { NoteShowPage } from "../notes/NoteShowPage.tsx";
 // ── CUSTOM: Import TaskList for Tasks tab ────────────────
 import TaskList from "../tasks/TaskList";
 // ── END CUSTOM ───────────────────────────────────────────
+// ── CUSTOM: Import Insights ──────────────────────────────
+import { InsightsList } from '../insights/InsightsList';
+import { InsightsShow } from '../insights/InsightsShow';
+// ── END CUSTOM ───────────────────────────────────────────
 
 const defaultStore = localStorageStore(undefined, "CRM");
 
@@ -275,6 +279,15 @@ const DesktopAdmin = (
       <Resource name="deal_notes" />
       {/* ── CUSTOM: Added list prop to tasks Resource ── */}
       <Resource name="tasks" list={TaskList} />
+      {/* ── END CUSTOM ── */}
+      {/* ── CUSTOM: Added Insights resource ── */}
+      <Resource
+        name="insights"
+        list={InsightsList}
+        show={InsightsShow}
+        recordRepresentation="snap_name"
+        options={{ label: 'Insights' }}
+      />
       {/* ── END CUSTOM ── */}
       <Resource name="sales" {...sales} />
       <Resource name="tags" />

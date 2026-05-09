@@ -28,6 +28,10 @@ const Header = () => {
   } else if (matchPath("/tasks/*", location.pathname)) {
     currentPath = "/tasks";
   // ── END CUSTOM ───────────────────────────────────────────
+  // ── CUSTOM: Added Insights path detection ────────────────
+  } else if (matchPath("/insights/*", location.pathname)) {
+    currentPath = "/insights";
+  // ── END CUSTOM ───────────────────────────────────────────
   } else {
     currentPath = false;
   }
@@ -75,6 +79,13 @@ const Header = () => {
                     to="/companies"
                     isActive={currentPath === "/companies"}
                   />
+                  {/* ── CUSTOM: Added Insights navigation tab ── */}
+                  <NavigationTab
+                    label="Insights"
+                    to="/insights"
+                    isActive={currentPath === "/insights"}
+                  />
+                  {/* ── END CUSTOM ── */}
                   <NavigationTab
                     label={translate("resources.deals.name", {
                       smart_count: 2,

@@ -1,5 +1,16 @@
 import { CRM } from "@/components/atomic-crm/root/CRM";
 
+// ── CUSTOM: Insights cross-database dataProvider ─────────────────
+import { getDataProvider } from "@/components/atomic-crm/providers/supabase";
+import { insightsDataProvider } from "@/components/atomic-crm/insights/insightsDataProvider";
+import { createWrappedDataProvider } from "@/components/atomic-crm/insights/wrappedDataProvider";
+
+const wrappedDataProvider = createWrappedDataProvider(
+  getDataProvider(),
+  insightsDataProvider
+);
+// ── END CUSTOM ───────────────────────────────────────────────────
+
 /**
  * Application entry point
  *
@@ -24,6 +35,7 @@ import { CRM } from "@/components/atomic-crm/root/CRM";
  *    />
  * );
  */
-const App = () => <CRM />;
+//const App = () => <CRM />;
+const App = () => <CRM dataProvider={wrappedDataProvider} />;
 
 export default App;
