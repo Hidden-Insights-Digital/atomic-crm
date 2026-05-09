@@ -244,6 +244,17 @@ const InsightRow = ({ record }: { record: any }) => {
             record.snap_name
           )}
         </div>
+        {record.place_id && (
+          <a
+            href={`https://www.google.com/maps/place/?q=place_id:${record.place_id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-muted-foreground hover:underline"
+            onClick={e => e.stopPropagation()}
+          >
+            View on Google Maps
+          </a>
+        )}
       </div>
 
       {/* Coloured tier badge */}
