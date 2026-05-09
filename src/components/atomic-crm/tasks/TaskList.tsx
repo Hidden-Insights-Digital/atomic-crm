@@ -8,9 +8,13 @@ import { useConfigurationContext } from "../root/ConfigurationContext";
 import { Task } from "./Task";
 import type { Task as TTask } from "../types";
 import { Card } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { useState } from "react";
 
 const TaskList = () => {
   const { taskTypes } = useConfigurationContext();
+  const [showAll, setShowAll] = useState(false);
 
   const taskFilters = [
     <SearchInput source="q" alwaysOn />,
@@ -32,29 +36,47 @@ const TaskList = () => {
       perPage={25}
       actions={
         <TopToolbar>
+          <div className="flex items-center gap-2 mr-2">
+            <Switch
+              id="show-all"
+              checked={showAll}
+              onCheckedChange={setShowAll}
+            />
+            <Label htmlFor="show-all" className="text-sm cursor-pointer">
+              Show completed
+            </Label>
+          </div>
           <ExportButton />
         </TopToolbar>
       }
     >
-      <TaskListContent />
+      <TaskListContent showAll={showAll} />
     </List>
   );
 };
 
-const TaskListContent = () => {
+const TaskListContent = ({ showAll }: { showAll: boolean }) => {
   const { data, isPending } = useListContext<TTask>();
   const translate = useTranslate();
 
   if (isPending) return null;
 
-  if (!data?.length) {
+  const filtered = showAll
+    ? data
+    : data?.filter((task) => !task.done_date);
+
+  if (!filtered?.length) {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-muted-foreground gap-3">
         <p className="text-base font-medium">
-          {translate("resources.tasks.empty")}
+          {showAll
+            ? translate("resources.tasks.empty")
+            : "No active tasks"}
         </p>
         <p className="text-sm">
-          {translate("resources.tasks.empty_list_hint")}
+          {showAll
+            ? translate("resources.tasks.empty_list_hint")
+            : "All tasks are completed. Toggle \"Show completed\" to see them."}
         </p>
       </div>
     );
@@ -62,7 +84,7 @@ const TaskListContent = () => {
 
   return (
     <Card className="p-4 space-y-2">
-      {data.map((task) => (
+      {filtered.map((task) => (
         <div
           key={task.id}
           className="border-b border-border last:border-0 pb-3 last:pb-0"
