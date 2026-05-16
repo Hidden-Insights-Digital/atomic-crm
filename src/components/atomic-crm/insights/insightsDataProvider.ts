@@ -27,7 +27,7 @@ export const insightsDataProvider = {
         ...params,
         filter: {
           ...restFilter,
-          ...(q ? { 'snap_name@ilike': `%${q}%` } : {}),
+          ...(q ? { 'name@ilike': `%${q}%` } : {}),
         },
       });
     }
