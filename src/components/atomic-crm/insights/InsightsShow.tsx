@@ -352,11 +352,11 @@ const InsightsShowContent = () => {
                 {record.website_title && (
                   <p className="font-medium text-sm mt-1">{record.website_title}</p>
                 )}
-                {record.website_generator && (
-                  <p className="text-xs text-muted-foreground mt-0.5">Built with: {record.website_generator}</p>
-                )}
                 {record.website_description && (
                   <p className="text-sm text-muted-foreground leading-relaxed mt-1">{record.website_description}</p>
+                )}
+                {record.website_generator && (
+                  <p className="text-xs text-muted-foreground mt-2">Built with: {record.website_generator}</p>
                 )}
               </>
             ) : (
