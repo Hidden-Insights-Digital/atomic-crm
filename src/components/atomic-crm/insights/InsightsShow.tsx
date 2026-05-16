@@ -162,7 +162,7 @@ const SocialLink = ({ href, label, icon, mutedIcon }: SocialLinkProps) => {
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-1.5 text-sm text-foreground hover:bg-muted transition-colors"
+        className="flex items-center justify-center gap-2 rounded-md border border-border px-3 py-1.5 text-sm text-foreground hover:bg-muted transition-colors w-full"
       >
         {icon}
         {label}
@@ -172,7 +172,7 @@ const SocialLink = ({ href, label, icon, mutedIcon }: SocialLinkProps) => {
   }
   return (
     <span
-      className="inline-flex items-center gap-2 rounded-md border border-dashed border-border px-3 py-1.5 text-sm text-muted-foreground/50 cursor-default select-none"
+      className="flex items-center justify-center gap-2 rounded-md border border-dashed border-border px-3 py-1.5 text-sm text-muted-foreground/50 cursor-default select-none w-full"
       title={`No ${label} page found`}
     >
       <span className="opacity-40">{mutedIcon}</span>
@@ -337,7 +337,7 @@ const InsightsShowContent = () => {
         <Card>
           <CardContent className="px-5 pt-4 pb-5">
             <SectionHeading>Social Media</SectionHeading>
-            <div className="flex flex-wrap gap-2 mb-5">
+            <div className="grid grid-cols-3 gap-2 mb-5">
               <SocialLink
                 href={record.social_facebook}
                 label="Facebook"
