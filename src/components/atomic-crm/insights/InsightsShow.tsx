@@ -225,10 +225,15 @@ const InsightsShowContent = () => {
   const { record, isPending } = useShowContext();
   if (isPending || !record) return null;
 
-
+  // Build a Google Maps URL that always resolves:
+  //   1. place_id  → most accurate, goes directly to the listing
+  //   2. name + address search → good fallback when place_id is missing
+  //   3. name-only search → last resort
   const mapsUrl = record.place_id
     ? `https://www.google.com/maps/place/?q=place_id:${record.place_id}`
-    : null;
+    : record.address
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${record.name} ${record.address}`)}`
+    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(record.name)}`;
 
 
   return (
@@ -261,15 +266,31 @@ const InsightsShowContent = () => {
                 </div>
               )}
 
+              {/* Google Maps link — always shown */}
+              <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                <MapPin size={14} className="shrink-0" />
+                <a
+                  href={mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:underline flex items-center gap-1"
+                >
+                  View business profile on Google Maps
+                  <ExternalLink size={12} className="shrink-0" />
+                </a>
+              </div>
+
+              {/* Address text — shown only when available */}
               {record.address && (
-                <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                  <MapPin size={14} />
-                  {mapsUrl ? (
-                    <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center gap-1">
-                      {record.address}
-                      <ExternalLink size={12} />
-                    </a>
-                  ) : record.address}
+                <div className="flex items-center gap-1.5 text-sm text-muted-foreground pl-[22px]">
+                  <a
+                    href={mapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:underline"
+                  >
+                    {record.address}
+                  </a>
                 </div>
               )}
 
