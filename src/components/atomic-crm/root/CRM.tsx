@@ -285,7 +285,7 @@ const DesktopAdmin = (
         name="insights"
         list={InsightsList}
         show={InsightsShow}
-        recordRepresentation="snap_name"
+        recordRepresentation="name"
         options={{ label: 'Insights' }}
       />
       {/* ── END CUSTOM ── */}
