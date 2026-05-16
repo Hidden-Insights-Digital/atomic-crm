@@ -29,12 +29,23 @@ const TierBadge = ({ tier }: { tier: string | null }) => {
 };
 
 
+// ── Score config ───────────────────────────────────────────────────────────────
+
+// Per-category maximums as defined by the Digital Presence Assessment pipeline
+const SCORE_MAX = {
+  website: 40,
+  google:  20,
+  social:  15,
+  content: 10,
+  review:  15,
+  total:   100,
+} as const;
+
+
 // ── Score breakdown (collapsible) ─────────────────────────────────────────────
 
-// Maximum score per category as defined by the Digital Presence Assessment pipeline
-const SCORE_MAX = 40;
 
-const ScoreBar = ({ label, score, max = SCORE_MAX }: { label: string; score: number | null; max?: number }) => {
+const ScoreBar = ({ label, score, max }: { label: string; score: number | null; max: number }) => {
   const pct = score != null ? Math.round((score / max) * 100) : 0;
   return (
     <div className="flex flex-col gap-1">
@@ -57,11 +68,11 @@ const ScoreBreakdown = ({ record }: { record: any }) => (
       Score breakdown
     </summary>
     <div className="mt-3 flex flex-col gap-3 pt-2 border-t">
-      <ScoreBar label="Website" score={record.website_score} />
-      <ScoreBar label="Google"  score={record.google_score} />
-      <ScoreBar label="Social"  score={record.social_score} />
-      <ScoreBar label="Content" score={record.content_score} />
-      <ScoreBar label="Reviews" score={record.review_score} />
+      <ScoreBar label="Website" score={record.website_score} max={SCORE_MAX.website} />
+      <ScoreBar label="Google"  score={record.google_score}  max={SCORE_MAX.google}  />
+      <ScoreBar label="Social"  score={record.social_score}  max={SCORE_MAX.social}  />
+      <ScoreBar label="Content" score={record.content_score} max={SCORE_MAX.content} />
+      <ScoreBar label="Reviews" score={record.review_score}  max={SCORE_MAX.review}  />
     </div>
   </details>
 );
@@ -308,7 +319,7 @@ const InsightsShowContent = () => {
                 <div className="flex flex-col items-end">
                   <div className="text-3xl font-bold tabular-nums">
                     {record.total_score}
-                    <span className="text-base font-normal text-muted-foreground ml-1">/ {SCORE_MAX}</span>
+                    <span className="text-base font-normal text-muted-foreground ml-1">/ {SCORE_MAX.total}</span>
                   </div>
                   <ScoreBreakdown record={record} />
                 </div>
@@ -338,7 +349,7 @@ const InsightsShowContent = () => {
                   <ExternalLink size={12} className="shrink-0" />
                 </a>
                 {record.website_score != null && (
-                  <span className="ml-3 text-xs text-muted-foreground">Score: {record.website_score} / {SCORE_MAX}</span>
+                  <span className="ml-3 text-xs text-muted-foreground">Score: {record.website_score} / {SCORE_MAX.website}</span>
                 )}
                 {record.website_title && (
                   <p className="font-medium text-sm mt-1">{record.website_title}</p>
