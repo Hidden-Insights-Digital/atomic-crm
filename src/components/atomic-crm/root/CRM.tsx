@@ -65,6 +65,8 @@ import TaskList from "../tasks/TaskList";
 // ── CUSTOM: Import Insights ──────────────────────────────
 import { InsightsList } from '../insights/InsightsList';
 import { InsightsShow } from '../insights/InsightsShow';
+import { insightsDataProvider } from '../insights/insightsDataProvider';
+import { createWrappedDataProvider } from '../insights/wrappedDataProvider';
 // ── END CUSTOM ───────────────────────────────────────────
 
 const defaultStore = localStorageStore(undefined, "CRM");
@@ -224,11 +226,18 @@ export const CRM = ({
     [authProvider, dataProvider, store],
   );
 
+// ── CUSTOM: handles session management ──────────────────────────────
+  const wrappedProvider = useMemo(
+    () => createWrappedDataProvider(dataProvider, insightsDataProvider),
+    [dataProvider]
+  );
+// ── END CUSTOM ───────────────────────────────────────────
+
   const ResponsiveAdmin = isMobile ? MobileAdmin : DesktopAdmin;
 
   return (
     <ResponsiveAdmin
-      dataProvider={dataProvider}
+      dataProvider={wrappedProvider}  // Custom changed from dataProvider={dataProvider}
       authProvider={wrappedAuthProvider}
       i18nProvider={i18nProvider}
       store={store}
