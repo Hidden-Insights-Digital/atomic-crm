@@ -286,7 +286,7 @@ const InsightsShowContent = () => {
                   rel="noopener noreferrer"
                   className="hover:underline flex items-center gap-1"
                 >
-                  View business profile on Google Maps
+                  View Google Maps Business Profile
                   <ExternalLink size={12} className="shrink-0" />
                 </a>
               </div>
@@ -298,9 +298,10 @@ const InsightsShowContent = () => {
                     href={mapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:underline"
+                    className="hover:underline flex items-center gap-1"
                   >
                     {record.address}
+                    <ExternalLink size={12} className="shrink-0" />
                   </a>
                 </div>
               )}
