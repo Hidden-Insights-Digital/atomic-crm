@@ -29,7 +29,7 @@ const TierBadge = ({ tier }: { tier: string | null }) => {
 };
 
 
-// ── Score config ───────────────────────────────────────────────────────────────
+// ── Score config ──────────────────────────────────────────────────────────────
 
 // Per-category maximums as defined by the Digital Presence Assessment pipeline
 const SCORE_MAX = {
@@ -158,7 +158,7 @@ const IconYouTube = ({ muted = false }: { muted?: boolean }) => (
 );
 
 
-// ── Social link button ─────────────────────────────────────────────────────────
+// ── Social link button ────────────────────────────────────────────────────────
 
 
 type SocialLinkProps = {
@@ -236,10 +236,6 @@ const InsightsShowContent = () => {
   const { record, isPending } = useShowContext();
   if (isPending || !record) return null;
 
-  // Build a Google Maps URL that always resolves:
-  //   1. place_id  → most accurate, goes directly to the listing
-  //   2. name + address search → good fallback when place_id is missing
-  //   3. name-only search → last resort
   const mapsUrl = record.place_id
     ? `https://www.google.com/maps/place/?q=place_id:${record.place_id}`
     : record.address
@@ -286,14 +282,15 @@ const InsightsShowContent = () => {
                   rel="noopener noreferrer"
                   className="hover:underline flex items-center gap-1"
                 >
-                  View Google Maps Business Profile
+                  View Google Maps business profile
                   <ExternalLink size={12} className="shrink-0" />
                 </a>
               </div>
 
-              {/* Address text — shown only when available */}
+              {/* Address text — indented sub-row */}
               {record.address && (
                 <div className="flex items-center gap-1.5 text-sm text-muted-foreground pl-[22px]">
+                  <span className="text-muted-foreground/50 select-none" aria-hidden="true">↳</span>
                   <a
                     href={mapsUrl}
                     target="_blank"
