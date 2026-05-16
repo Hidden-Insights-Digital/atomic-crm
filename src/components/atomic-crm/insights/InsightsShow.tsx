@@ -4,7 +4,6 @@ import { ShowBase, useShowContext } from 'ra-core';
 import { Link } from 'react-router';
 import { ExternalLink, Building2, MapPin, Phone, Globe, ChevronLeft } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 
 // ── Tier config (mirrors InsightsList) ────────────────────────────────────────
 
