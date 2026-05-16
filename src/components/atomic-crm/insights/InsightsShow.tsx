@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 import { ExternalLink, Building2, MapPin, Phone, Globe, ChevronLeft } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-// ── Tier config (mirrors InsightsList) ────────────────────────────────────────
+// ── Tier config ───────────────────────────────────────────────────────────────
 
 const TIERS: Record<string, { label: string; dot: string; bg: string; text: string }> = {
   green:  { label: 'Tier 1', dot: 'bg-green-500',  bg: 'bg-green-100 dark:bg-green-900/40',   text: 'text-green-800 dark:text-green-300'  },
@@ -25,7 +25,7 @@ const TierBadge = ({ tier }: { tier: string | null }) => {
   );
 };
 
-// ── Score bar ─────────────────────────────────────────────────────────────────
+// ── Score breakdown (collapsible) ─────────────────────────────────────────────
 
 const ScoreBar = ({ label, score, max = 100 }: { label: string; score: number | null; max?: number }) => {
   const pct = score != null ? Math.round((score / max) * 100) : 0;
@@ -35,17 +35,30 @@ const ScoreBar = ({ label, score, max = 100 }: { label: string; score: number | 
         <span className="text-muted-foreground">{label}</span>
         <span className="font-medium">{score ?? '—'}</span>
       </div>
-      <div className="h-2 rounded-full bg-muted overflow-hidden">
-        <div
-          className="h-full rounded-full bg-primary transition-all"
-          style={{ width: `${pct}%` }}
-        />
+      <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+        <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${pct}%` }} />
       </div>
     </div>
   );
 };
 
-// ── JSON list (strengths / weaknesses / services) ─────────────────────────────
+const ScoreBreakdown = ({ record }: { record: any }) => (
+  <details className="mt-2 group">
+    <summary className="cursor-pointer text-xs text-muted-foreground hover:text-foreground list-none flex items-center gap-1 select-none">
+      <span className="group-open:rotate-90 transition-transform inline-block">▶</span>
+      Score breakdown
+    </summary>
+    <div className="mt-3 flex flex-col gap-3 pt-2 border-t">
+      <ScoreBar label="Website" score={record.website_score} />
+      <ScoreBar label="Google"  score={record.google_score} />
+      <ScoreBar label="Social"  score={record.social_score} />
+      <ScoreBar label="Content" score={record.content_score} />
+      <ScoreBar label="Reviews" score={record.review_score} />
+    </div>
+  </details>
+);
+
+// ── JSON list ─────────────────────────────────────────────────────────────────
 
 const JsonList = ({ data, emptyText }: { data: any; emptyText: string }) => {
   const items: string[] = Array.isArray(data)
@@ -53,9 +66,7 @@ const JsonList = ({ data, emptyText }: { data: any; emptyText: string }) => {
     : typeof data === 'string'
     ? JSON.parse(data)
     : [];
-
   if (!items.length) return <p className="text-sm text-muted-foreground">{emptyText}</p>;
-
   return (
     <ul className="list-disc list-inside space-y-1">
       {items.map((item, i) => (
@@ -100,6 +111,19 @@ const InsightsShowContent = () => {
             <div className="flex flex-col gap-2">
               <h1 className="text-2xl font-bold">{record.name}</h1>
 
+              {/* CRM company link — same style as address */}
+              {record.crm_company_id && (
+                <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                  <Building2 size={14} />
+                  <Link
+                    to={`/companies/${record.crm_company_id}/show`}
+                    className="hover:underline"
+                  >
+                    View linked company in CRM
+                  </Link>
+                </div>
+              )}
+
               {record.address && (
                 <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                   <MapPin size={14} />
@@ -120,24 +144,18 @@ const InsightsShowContent = () => {
                   <a href={`tel:${record.phone}`} className="hover:underline">{record.phone}</a>
                 </div>
               )}
-
-              {record.website && (
-                <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                  <Globe size={14} />
-                  <a href={record.website} target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center gap-1 truncate max-w-xs">
-                    {record.website_title || record.website}
-                    <ExternalLink size={12} className="shrink-0" />
-                  </a>
-                </div>
-              )}
             </div>
 
+            {/* Tier + score + collapsible breakdown */}
             <div className="flex flex-col items-start sm:items-end gap-2 shrink-0">
               <TierBadge tier={record.tier} />
               {record.total_score != null && (
-                <div className="text-3xl font-bold tabular-nums">
-                  {record.total_score}
-                  <span className="text-base font-normal text-muted-foreground ml-1">/ 100</span>
+                <div className="flex flex-col items-end">
+                  <div className="text-3xl font-bold tabular-nums">
+                    {record.total_score}
+                    <span className="text-base font-normal text-muted-foreground ml-1">/ 100</span>
+                  </div>
+                  <ScoreBreakdown record={record} />
                 </div>
               )}
             </div>
@@ -145,23 +163,7 @@ const InsightsShowContent = () => {
         </CardContent>
       </Card>
 
-      {/* Score breakdown */}
-      {(record.website_score != null || record.google_score != null || record.social_score != null) && (
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base">Score Breakdown</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-4">
-            <ScoreBar label="Website" score={record.website_score} />
-            <ScoreBar label="Google" score={record.google_score} />
-            <ScoreBar label="Social" score={record.social_score} />
-            <ScoreBar label="Content" score={record.content_score} />
-            <ScoreBar label="Reviews" score={record.review_score} />
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Opportunity summary */}
+      {/* Opportunity Summary */}
       {record.opportunity_summary && (
         <Card>
           <CardHeader className="pb-2">
@@ -173,7 +175,7 @@ const InsightsShowContent = () => {
         </Card>
       )}
 
-      {/* Strengths / Weaknesses / Recommended services */}
+      {/* Strengths / Weaknesses / Recommended Services */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="pb-2">
@@ -203,17 +205,36 @@ const InsightsShowContent = () => {
         </Card>
       </div>
 
-      {/* CRM link */}
-      {record.crm_company_id && (
+      {/* Website */}
+      {record.website && (
         <Card>
-          <CardContent className="pt-6">
-            <Link
-              to={`/companies/${record.crm_company_id}/show`}
-              className="flex items-center gap-2 text-sm font-medium hover:underline"
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Globe size={16} />
+              Website
+              {record.website_score != null && (
+                <span className="ml-auto text-xs font-normal text-muted-foreground">
+                  Score: {record.website_score} / 100
+                </span>
+              )}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-2">
+            <a
+              href={record.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-sm font-medium hover:underline text-primary"
             >
-              <Building2 size={16} />
-              View linked company in CRM
-            </Link>
+              {record.website}
+              <ExternalLink size={12} />
+            </a>
+            {record.website_title && (
+              <p className="text-sm font-medium">{record.website_title}</p>
+            )}
+            {record.website_description && (
+              <p className="text-sm text-muted-foreground leading-relaxed">{record.website_description}</p>
+            )}
           </CardContent>
         </Card>
       )}
