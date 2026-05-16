@@ -31,14 +31,16 @@ const TierBadge = ({ tier }: { tier: string | null }) => {
 
 // ── Score breakdown (collapsible) ─────────────────────────────────────────────
 
+// Maximum score per category as defined by the Digital Presence Assessment pipeline
+const SCORE_MAX = 40;
 
-const ScoreBar = ({ label, score, max = 100 }: { label: string; score: number | null; max?: number }) => {
+const ScoreBar = ({ label, score, max = SCORE_MAX }: { label: string; score: number | null; max?: number }) => {
   const pct = score != null ? Math.round((score / max) * 100) : 0;
   return (
     <div className="flex flex-col gap-1">
       <div className="flex justify-between text-sm">
         <span className="text-muted-foreground">{label}</span>
-        <span className="font-medium">{score ?? '—'}</span>
+        <span className="font-medium">{score ?? '—'} / {max}</span>
       </div>
       <div className="h-1.5 rounded-full bg-muted overflow-hidden">
         <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${pct}%` }} />
@@ -285,7 +287,7 @@ const InsightsShowContent = () => {
                 <div className="flex flex-col items-end">
                   <div className="text-3xl font-bold tabular-nums">
                     {record.total_score}
-                    <span className="text-base font-normal text-muted-foreground ml-1">/ 100</span>
+                    <span className="text-base font-normal text-muted-foreground ml-1">/ {SCORE_MAX}</span>
                   </div>
                   <ScoreBreakdown record={record} />
                 </div>
@@ -315,7 +317,7 @@ const InsightsShowContent = () => {
                   <ExternalLink size={12} className="shrink-0" />
                 </a>
                 {record.website_score != null && (
-                  <span className="ml-3 text-xs text-muted-foreground">Score: {record.website_score} / 100</span>
+                  <span className="ml-3 text-xs text-muted-foreground">Score: {record.website_score} / {SCORE_MAX}</span>
                 )}
                 {record.website_title && (
                   <p className="font-medium text-sm mt-1">{record.website_title}</p>
