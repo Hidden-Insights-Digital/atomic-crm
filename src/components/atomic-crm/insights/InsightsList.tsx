@@ -58,7 +58,7 @@ export const InsightsList = () => (
     title={false}
     actions={<InsightsListActions />}
     perPage={25}
-    sort={{ field: 'snap_name', order: 'ASC' }}
+    sort={{ field: 'name', order: 'ASC' }}
   >
     <InsightsListLayout />
   </List>
@@ -86,7 +86,7 @@ const InsightsListLayout = () => {
 
 const InsightsListActions = () => (
   <TopToolbar>
-    <SortButton fields={['snap_name', 'total_score', 'updated_at']} />
+    <SortButton fields={['name', 'total_score', 'updated_at']} />
   </TopToolbar>
 );
 
@@ -204,7 +204,7 @@ const InsightsListContent = () => {
   return (
     <div className="md:divide-y">
       {records.map((record) => (
-        <RecordContextProvider key={record.id} value={record}>
+        <RecordContextProvider key={record.cid} value={record}>
           <InsightRow record={record} />
         </RecordContextProvider>
       ))}
@@ -224,10 +224,10 @@ const InsightRow = ({ record }: { record: any }) => {
         year: 'numeric',
       })
     : null;
-
+ 
   return (
     <Link
-      to={`/insights/${record.id}/show`}
+      to={`/insights/${record.cid}/show`}
       className="flex flex-row items-center pl-4 pr-4 py-2 hover:bg-muted transition-colors first:rounded-t-xl last:rounded-b-xl"
     >
       <div className="flex-1 min-w-0">
@@ -241,7 +241,7 @@ const InsightRow = ({ record }: { record: any }) => {
               <TextField source="name" />
             </ReferenceField>
           ) : (
-            record.snap_name
+            record.name
           )}
         </div>
         {record.place_id && (
