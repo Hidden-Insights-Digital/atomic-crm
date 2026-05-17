@@ -411,6 +411,7 @@ const InsightsShowContent = () => {
               Digital Signals
             </h3>
             <div className="flex flex-wrap gap-2">
+              <SignalPill active={record.verified ?? null} label="GBP Claimed" />
               <SignalPill active={record.has_fb_pixel ?? null} label="Facebook Pixel" />
               <SignalPill active={record.has_google_tag ?? null} label="Google Tag" />
             </div>
