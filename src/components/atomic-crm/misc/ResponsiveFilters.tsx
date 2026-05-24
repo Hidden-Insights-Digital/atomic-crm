@@ -79,9 +79,9 @@ export const ResponsiveFilters = ({
           <SheetContent side="bottom" className="h-dvh p-4 flex flex-col">
             <SheetHeader className="-p-4">
               <SheetTitle>
-                <span className="text-xl font-semibold"> // Changed h1 to span
+                <span className="text-xl font-semibold">
                   {translate("ra.action.add_filter")}
-                </span> // Changed h1 to span
+                </span>
               </SheetTitle>
               {/* Hidden description required by Radix UI for accessibility */}
               <SheetDescription className="sr-only">
