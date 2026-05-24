@@ -58,6 +58,9 @@ import { MobileTasksList } from "../tasks/MobileTasksList.tsx";
 import { ContactListMobile } from "../contacts/ContactList.tsx";
 import { ContactShow } from "../contacts/ContactShow.tsx";
 import { CompanyShow } from "../companies/CompanyShow.tsx";
+// HID COMPANY APP: Add CompanyList for mobile companies nav
+import { CompanyList } from "../companies/CompanyList.tsx"; //need to create a mobile optimised version
+// END HID COMPANY APP
 import { NoteShowPage } from "../notes/NoteShowPage.tsx";
 // ── CUSTOM: Import TaskList for Tasks tab ────────────────
 import TaskList from "../tasks/TaskList";
@@ -364,7 +367,9 @@ const MobileAdmin = (
         >
           <Route path=":id/notes/:noteId" element={<NoteShowPage />} />
         </Resource>
-        <Resource name="companies" show={CompanyShow} />
+        {/* HID COMPANIES APP: Add list view so /companies route works on mobile */}
+        <Resource name="companies" list={CompanyList} show={CompanyShow} />
+        {/* END HID COMPANIES APP */}
         <Resource name="tasks" list={MobileTasksList} />
       </Admin>
     </PersistQueryClientProvider>

@@ -6,7 +6,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { Home, ListTodo, Plus, Settings, Users } from "lucide-react";
+// HID COMPANIES APP: Replace Home with Building2 for Companies nav
+import { Building2, ListTodo, Plus, Settings, Users } from "lucide-react";
+// END HID COMPANIES APP
 import { useTranslate } from "ra-core";
 import { Link, matchPath, useLocation, useMatch } from "react-router";
 import { ContactCreateSheet } from "../contacts/ContactCreateSheet";
@@ -18,11 +20,11 @@ export const MobileNavigation = () => {
   const location = useLocation();
   const translate = useTranslate();
 
-  let currentPath: string | boolean = "/";
-  if (matchPath("/", location.pathname)) {
-    currentPath = "/";
-  } else if (matchPath("/contacts/*", location.pathname)) {
+  // HID COMPANIES APP: Default to /companies instead of dashboard
+  let currentPath: string | boolean = "/companies";
+  if (matchPath("/contacts/*", location.pathname)) {
     currentPath = "/contacts";
+  // END HID COMPANIES APP  
   } else if (matchPath("/companies/*", location.pathname)) {
     currentPath = "/companies";
   } else if (matchPath("/tasks/*", location.pathname)) {
@@ -54,12 +56,14 @@ export const MobileNavigation = () => {
     >
       <div className="flex justify-center">
         <>
+          {/* HID COMPANIES APP: Companies button replaces Home/Dashboard */}
           <NavigationButton
-            href="/"
-            Icon={Home}
-            label={translate("ra.page.dashboard")}
-            isActive={currentPath === "/"}
+            href="/companies"
+            Icon={Building2}
+            label={translate("resources.companies.name", { smart_count: 2 })}
+            isActive={currentPath === "/companies"}
           />
+          {/* END HID COMPANIES APP */}
           <NavigationButton
             href="/contacts"
             Icon={Users}
