@@ -1,7 +1,11 @@
 import { Building, Truck, Users } from "lucide-react";
-import { FilterLiveForm, useGetIdentity, useTranslate } from "ra-core";
+import { useGetIdentity, useTranslate } from "ra-core";
 import { ToggleFilterButton } from "@/components/admin/toggle-filter-button";
-import { SearchInput } from "@/components/admin/search-input";
+// ── HID COMPANY APP: Remove SearchInput/FilterLiveForm, add ResponsiveFilters ──
+// Original: import { FilterLiveForm, useGetIdentity, useTranslate } from "ra-core";
+// Original: import { SearchInput } from "@/components/admin/search-input";
+import { ResponsiveFilters } from "../misc/ResponsiveFilters";
+// ── END HID COMPANY APP ───────────────────────────────────────────────────────
 
 import { FilterCategory } from "../filters/FilterCategory";
 import { useConfigurationContext } from "../root/ConfigurationContext";
@@ -17,10 +21,14 @@ export const CompanyListFilter = () => {
     name: getTranslatedCompanySizeLabel(size, translate),
   }));
   return (
-    <div className="w-52 min-w-52 flex flex-col gap-8">
-      <FilterLiveForm>
-        <SearchInput source="q" />
-      </FilterLiveForm>
+
+    <ResponsiveFilters
+      searchInput={{
+        placeholder: translate("resources.companies.filters.search", {
+          _: "Search companies...",
+        }),
+      }}
+    >
 
       <FilterCategory
         icon={<Building className="h-4 w-4" />}
@@ -60,6 +68,6 @@ export const CompanyListFilter = () => {
           value={{ sales_id: identity?.id }}
         />
       </FilterCategory>
-    </div>
+    </ResponsiveFilters>
   );
 };

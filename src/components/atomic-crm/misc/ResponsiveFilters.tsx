@@ -7,6 +7,7 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
+  SheetDescription, // Hidden description required by Radix UI for accessibility
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -78,10 +79,14 @@ export const ResponsiveFilters = ({
           <SheetContent side="bottom" className="h-dvh p-4 flex flex-col">
             <SheetHeader className="-p-4">
               <SheetTitle>
-                <h1 className="text-xl font-semibold">
+                <span className="text-xl font-semibold"> // Changed h1 to span
                   {translate("ra.action.add_filter")}
-                </h1>
+                </span> // Changed h1 to span
               </SheetTitle>
+              {/* Hidden description required by Radix UI for accessibility */}
+              <SheetDescription className="sr-only">
+                Filter options panel
+              </SheetDescription>
             </SheetHeader>
             <div className="flex-1 overflow-y-auto flex flex-col gap-3 pb-4">
               {children}
