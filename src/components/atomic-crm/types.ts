@@ -52,6 +52,9 @@ export type Company = {
   name: string;
   logo: RAFile;
   sector: string;
+  // ── HID COMPANY APP ──
+  hid_pipeline_stage?: string;
+  // ── END HID COMPANY APP ──
   size: 1 | 10 | 50 | 250 | 500;
   linkedin_url: string;
   website: string;

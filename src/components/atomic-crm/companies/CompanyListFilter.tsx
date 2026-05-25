@@ -1,4 +1,4 @@
-import { Building, Truck, Users } from "lucide-react";
+import { Tag, Truck, Users } from "lucide-react";
 import { useGetIdentity, useTranslate } from "ra-core";
 import { ToggleFilterButton } from "@/components/admin/toggle-filter-button";
 // ── HID COMPANY APP: Remove SearchInput/FilterLiveForm, add ResponsiveFilters ──
@@ -9,17 +9,25 @@ import { ResponsiveFilters } from "../misc/ResponsiveFilters";
 
 import { FilterCategory } from "../filters/FilterCategory";
 import { useConfigurationContext } from "../root/ConfigurationContext";
-import { getTranslatedCompanySizeLabel } from "./getTranslatedCompanySizeLabel";
-import { sizes } from "./sizes";
+// import { getTranslatedCompanySizeLabel } from "./getTranslatedCompanySizeLabel";
+// import { sizes } from "./sizes";
+
+// ── HID COMPANY APP: Pipeline stage filter choices (replaces Size) ───
+const PIPELINE_STAGE_CHOICES = [
+  { id: "prospect",  name: "Prospect" },
+  { id: "targeting", name: "Targeting" },
+  { id: "contacted", name: "Contacted" },
+  { id: "active",    name: "Active" },
+  { id: "inactive",  name: "Inactive" },
+  { id: "excluded",  name: "Excluded" },
+];
+// ── END HID COMPANY APP ───────────────────────────────────────────────
 
 export const CompanyListFilter = () => {
   const { identity } = useGetIdentity();
   const { companySectors } = useConfigurationContext();
   const translate = useTranslate();
-  const translatedSizes = sizes.map((size) => ({
-    ...size,
-    name: getTranslatedCompanySizeLabel(size, translate),
-  }));
+
   return (
 
     <ResponsiveFilters
@@ -30,19 +38,21 @@ export const CompanyListFilter = () => {
       }}
     >
 
+      {/* ── HID COMPANY APP: Stage filter replaces Size filter ── */}
       <FilterCategory
-        icon={<Building className="h-4 w-4" />}
-        label="resources.companies.fields.size"
+        icon={<Tag className="h-4 w-4" />}
+        label="Stage"
       >
-        {translatedSizes.map((size) => (
+        {PIPELINE_STAGE_CHOICES.map((stage) => (
           <ToggleFilterButton
             className="w-full justify-between"
-            label={size.name}
-            key={size.name}
-            value={{ size: size.id }}
+            label={stage.name}
+            key={stage.id}
+            value={{ hid_pipeline_stage: stage.id }}
           />
         ))}
       </FilterCategory>
+      {/* ── END HID COMPANY APP ─────────────────────────────────── */}
 
       <FilterCategory
         icon={<Truck className="h-4 w-4" />}

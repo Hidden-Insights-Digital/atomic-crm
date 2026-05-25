@@ -10,15 +10,26 @@ import { DeleteButton } from "@/components/admin/delete-button";
 import { ShowButton } from "@/components/admin/show-button";
 import { TextField } from "@/components/admin/text-field";
 import { UrlField } from "@/components/admin/url-field";
-import { SelectField } from "@/components/admin/select-field";
+//import { SelectField } from "@/components/admin/select-field";
 
 import { formatLocalizedDate } from "../misc/RelativeDate";
 import { AsideSection } from "../misc/AsideSection";
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import type { Company } from "../types";
-import { getTranslatedCompanySizeLabel } from "./getTranslatedCompanySizeLabel";
-import { sizes } from "./sizes";
+// import { getTranslatedCompanySizeLabel } from "./getTranslatedCompanySizeLabel";
+// import { sizes } from "./sizes";
 import { useGetSalesName } from "../sales/useGetSalesName";
+
+// ── HID COMPANY APP: Pipeline stage config (replaces Size) ───────────
+const PIPELINE_STAGE_CHOICES = [
+  { id: "prospect",  label: "Prospect",  color: "bg-gray-100 text-gray-700" },
+  { id: "targeting", label: "Targeting", color: "bg-blue-100 text-blue-700" },
+  { id: "contacted", label: "Contacted", color: "bg-yellow-100 text-yellow-700" },
+  { id: "active",    label: "Active",    color: "bg-green-100 text-green-700" },
+  { id: "inactive",  label: "Inactive",  color: "bg-orange-100 text-orange-700" },
+  { id: "excluded",  label: "Excluded",  color: "bg-red-100 text-red-700" },
+];
+// ── END HID COMPANY APP ───────────────────────────────────────────────
 
 interface CompanyAsideProps {
   link?: string;
@@ -115,10 +126,6 @@ export const ContextInfo = ({ record }: { record: Company }) => {
 
   const sector = companySectors.find((s) => s.value === record.sector);
   const sectorLabel = sector?.label;
-  const translatedSizes = sizes.map((size) => ({
-    ...size,
-    name: getTranslatedCompanySizeLabel(size, translate),
-  }));
 
   return (
     <AsideSection
@@ -129,12 +136,21 @@ export const ContextInfo = ({ record }: { record: Company }) => {
           {translate("resources.companies.fields.sector")}: {sectorLabel}
         </span>
       )}
-      {record.size && (
-        <span>
-          {translate("resources.companies.fields.size")}:{" "}
-          <SelectField source="size" choices={translatedSizes} />
-        </span>
-      )}
+
+      {/* ── HID COMPANY APP: Pipeline stage badge replaces Size ── */}
+      {record.hid_pipeline_stage && (() => {
+        const stage = PIPELINE_STAGE_CHOICES.find(s => s.id === record.hid_pipeline_stage);
+        return stage ? (
+          <span className="flex items-center gap-2">
+            <span className="text-sm">Stage:</span>
+            <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${stage.color}`}>
+              {stage.label}
+            </span>
+          </span>
+        ) : null;
+      })()}
+      {/* ── END HID COMPANY APP ─────────────────────────────────── */}
+
       {record.revenue && (
         <span>
           {translate("resources.companies.fields.revenue")}:{" "}

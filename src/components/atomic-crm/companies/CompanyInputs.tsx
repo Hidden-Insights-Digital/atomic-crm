@@ -11,8 +11,8 @@ import ImageEditorField from "../misc/ImageEditorField";
 import { isLinkedinUrl } from "../misc/isLinkedInUrl";
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import type { Company, Sale } from "../types";
-import { getTranslatedCompanySizeLabel } from "./getTranslatedCompanySizeLabel";
-import { sizes } from "./sizes";
+//import { getTranslatedCompanySizeLabel } from "./getTranslatedCompanySizeLabel";
+//import { sizes } from "./sizes";
 
 const isUrl = (url: string) => {
   if (!url) return;
@@ -26,6 +26,17 @@ const isUrl = (url: string) => {
     };
   }
 };
+
+// ── HID COMPANY APP: Pipeline stage choices (replaces Size) ──────────
+const PIPELINE_STAGE_CHOICES = [
+  { id: "prospect",  name: "Prospect" },
+  { id: "targeting", name: "Targeting" },
+  { id: "contacted", name: "Contacted" },
+  { id: "active",    name: "Active" },
+  { id: "inactive",  name: "Inactive" },
+  { id: "excluded",  name: "Excluded" },
+];
+// ── END HID COMPANY APP ───────────────────────────────────────────────
 
 export const CompanyInputs = () => {
   const isMobile = useIsMobile();
@@ -97,10 +108,7 @@ const CompanyContactInputs = () => {
 const CompanyContextInputs = () => {
   const translate = useTranslate();
   const { companySectors } = useConfigurationContext();
-  const translatedSizes = sizes.map((size) => ({
-    ...size,
-    name: getTranslatedCompanySizeLabel(size, translate),
-  }));
+
   return (
     <div className="flex flex-col gap-4">
       <h6 className="text-lg font-semibold">
@@ -115,7 +123,14 @@ const CompanyContextInputs = () => {
         optionValue="value"
         helperText={false}
       />
-      <SelectInput source="size" choices={translatedSizes} helperText={false} />
+      {/* ── HID COMPANY APP: Pipeline stage replaces Size ─────── */}
+      <SelectInput
+        source="hid_pipeline_stage"
+        label="Stage"
+        choices={PIPELINE_STAGE_CHOICES}
+        helperText={false}
+      />
+      {/* ── END HID COMPANY APP ─────────────────────────────────── */}
       <TextInput source="revenue" helperText={false} />
       <TextInput source="tax_identifier" helperText={false} />
     </div>

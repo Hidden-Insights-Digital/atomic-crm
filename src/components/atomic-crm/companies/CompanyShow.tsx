@@ -3,7 +3,7 @@ import { SortButton } from "@/components/admin/sort-button";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { UserPlus } from "lucide-react";
+import { ChevronLeft, UserPlus } from "lucide-react";
 import {
   RecordContextProvider,
   ShowBase,
@@ -28,7 +28,7 @@ import { TagsList } from "../contacts/TagsList";
 import { findDealLabel } from "../deals/dealUtils";
 import { MobileContent } from "../layout/MobileContent";
 import MobileHeader from "../layout/MobileHeader";
-import { MobileBackButton } from "../misc/MobileBackButton";
+//import { MobileBackButton } from "../misc/MobileBackButton";
 import { formatRelativeDate } from "../misc/RelativeDate";
 import { Status } from "../misc/Status";
 import { useConfigurationContext } from "../root/ConfigurationContext";
@@ -55,14 +55,25 @@ export const CompanyShow = () => {
 const CompanyShowContentMobile = () => {
   const translate = useTranslate();
   const { record, isPending } = useShowContext<Company>();
+  const navigate = useNavigate();
+
   if (isPending || !record) return null;
 
   return (
     <>
       <MobileHeader>
-        <MobileBackButton to="/" />
+        {/* navigate(-1) preserves history, filters & scroll position */}
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="rounded-full size-5 pr-2"
+          onClick={() => navigate(-1)}
+        >
+          <ChevronLeft className="size-6" />
+        </Button>
         <div className="flex flex-1">
-          <Link to="/">
+          <Link to="/companies">
             <h1 className="text-xl font-semibold">
               {translate("resources.companies.forcedCaseName")}
             </h1>
