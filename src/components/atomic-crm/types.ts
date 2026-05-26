@@ -56,6 +56,8 @@ export type Company = {
   hid_pipeline_stage?: string;
   hid_tier?: 'red' | 'orange' | 'yellow' | 'green' | null;
   hid_verified?: boolean | null;
+  hid_opportunity?: string | null;
+  hid_recommended?: string[] | null;
   // ── END HID COMPANY APP ──
   size: 1 | 10 | 50 | 250 | 500;
   linkedin_url: string;

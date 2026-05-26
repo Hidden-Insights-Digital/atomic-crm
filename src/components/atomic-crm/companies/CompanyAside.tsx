@@ -120,12 +120,19 @@ export const CompanyInfo = ({ record }: { record: Company }) => {
 export const ContextInfo = ({ record }: { record: Company }) => {
   const { companySectors } = useConfigurationContext();
   const translate = useTranslate();
-  if (!record.revenue && !record.id) {
+  if (!record.sector && !record.hid_pipeline_stage && !record.hid_tier && !record.hid_opportunity && !record.hid_recommended) {
     return null;
   }
 
   const sector = companySectors.find((s) => s.value === record.sector);
   const sectorLabel = sector?.label;
+
+  const TIER_STYLES: Record<string, { bg: string; label: string }> = {
+    green:  { bg: 'bg-green-100 text-green-700',   label: 'Green 75>100' },
+    yellow: { bg: 'bg-yellow-100 text-yellow-700', label: 'Yellow: 50>75' },
+    orange: { bg: 'bg-orange-100 text-orange-700', label: 'Orange 25>50' },
+    red:    { bg: 'bg-red-100 text-red-700',       label: 'Red 0>25' },
+  };
 
   return (
     <AsideSection
@@ -137,7 +144,7 @@ export const ContextInfo = ({ record }: { record: Company }) => {
         </span>
       )}
 
-      {/* ── HID COMPANY APP: Pipeline stage badge replaces Size ── */}
+      {/* ── HID COMPANY APP: Pipeline stage badge ── */}
       {record.hid_pipeline_stage && (() => {
         const stage = PIPELINE_STAGE_CHOICES.find(s => s.id === record.hid_pipeline_stage);
         return stage ? (
@@ -149,23 +156,45 @@ export const ContextInfo = ({ record }: { record: Company }) => {
           </span>
         ) : null;
       })()}
-      {/* ── END HID COMPANY APP ─────────────────────────────────── */}
 
-      {record.revenue && (
-        <span>
-          {translate("resources.companies.fields.revenue")}:{" "}
-          <TextField source="revenue" />
+      {/* Tier badge */}
+      {record.hid_tier && TIER_STYLES[record.hid_tier] && (
+        <span className="flex items-center gap-2">
+          <span className="text-sm">Tier:</span>
+          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${TIER_STYLES[record.hid_tier].bg}`}>
+            {TIER_STYLES[record.hid_tier].label}
+          </span>
         </span>
       )}
-      {record.tax_identifier && (
-        <span>
-          {translate("resources.companies.fields.tax_identifier", {})}
-          : <TextField source="tax_identifier" />
+
+      {/* GBP Claimed */}
+      {record.hid_verified !== null && record.hid_verified !== undefined && (
+        <span className="flex items-center gap-2 text-sm">
+          GBP:
+          {record.hid_verified
+            ? <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">Claimed</span>
+            : <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">Unclaimed</span>
+          }
         </span>
       )}
-    </AsideSection>
-  );
-};
+
+      {/* Opportunity summary */}
+      {record.hid_opportunity && (
+        <p className="text-sm text-muted-foreground mt-1">{record.hid_opportunity}</p>
+      )}
+
+      {/* Recommended services */}
+      {record.hid_recommended && record.hid_recommended.length > 0 && (
+        <ul className="mt-1 space-y-1 list-disc list-outside pl-4 text-sm">
+          {record.hid_recommended.map((service, i) => (
+            <li key={i} className="text-muted-foreground">{service}</li>
+          ))}
+        </ul>
+      )}
+            {/* ── END HID COMPANY APP ── */}
+          </AsideSection>
+        );
+      };
 
 export const AddressInfo = ({ record }: { record: Company }) => {
   const translate = useTranslate();
