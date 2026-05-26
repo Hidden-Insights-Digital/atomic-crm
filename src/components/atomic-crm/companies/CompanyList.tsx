@@ -18,6 +18,7 @@ import { MobileContent } from "../layout/MobileContent";
 import { useCreatePath } from "ra-core";
 import { Link } from "react-router";
 import { CompanyAvatar } from "./CompanyAvatar";
+import { BadgeCheck } from "lucide-react";
 import type { Company } from "../types";
 // ── END HID COMPANY APP ───────────────────────────────────
 
@@ -108,11 +109,18 @@ const CompanyListLayoutMobile = () => {
 };
 
 // ── HID COMPANY APP: Compact mobile row layout for companies ──────────
+const TIER_COLOURS: Record<string, string> = {
+  green:  'bg-green-500',
+  yellow: 'bg-yellow-400',
+  orange: 'bg-orange-500',
+  red:    'bg-red-500',
+};
+
 const CompanyListContentMobile = () => {
   const { data, isPending } = useListContext<Company>();
   const createPath = useCreatePath();
 
-  if (isPending) return null;
+  if (isPending || !data) return null;
 
   return (
     <div className="flex flex-col divide-y">
@@ -123,10 +131,21 @@ const CompanyListContentMobile = () => {
           className="flex items-center gap-3 py-3 px-2 hover:bg-muted no-underline"
         >
           <CompanyAvatar record={record} />
-          <div className="flex flex-col min-w-0">
-            <span className="text-sm font-medium truncate">{record.name}</span>
+          <div className="flex flex-col min-w-0 flex-1">
+            <div className="flex items-center gap-1.5">
+              <span className="text-sm font-medium truncate">{record.name}</span>
+              {record.hid_verified && (
+                <BadgeCheck className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+              )}
+            </div>
             <span className="text-xs text-muted-foreground">{record.sector}</span>
           </div>
+          {record.hid_tier && (
+            <span
+              className={`w-2.5 h-2.5 rounded-full shrink-0 ${TIER_COLOURS[record.hid_tier]}`}
+              title={`Tier: ${record.hid_tier}`}
+            />
+          )}
         </Link>
       ))}
     </div>

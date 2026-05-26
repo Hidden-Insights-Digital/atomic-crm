@@ -6,8 +6,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-// HID COMPANIES APP: Replace Home with Building2 for Companies nav
-import { Building2, ListTodo, Plus, Settings, Users } from "lucide-react";
+// HID COMPANIES APP: Replace Home with Building for Companies nav
+import { Building, ListTodo, Plus, Settings, Users } from "lucide-react";
 // END HID COMPANIES APP
 import { useTranslate } from "ra-core";
 import { Link, matchPath, useLocation, useMatch } from "react-router";
@@ -59,7 +59,7 @@ export const MobileNavigation = () => {
           {/* HID COMPANIES APP: Companies button replaces Home/Dashboard */}
           <NavigationButton
             href="/companies"
-            Icon={Building2}
+            Icon={Building}
             label={translate("resources.companies.name", { smart_count: 2 })}
             isActive={currentPath === "/companies"}
           />
