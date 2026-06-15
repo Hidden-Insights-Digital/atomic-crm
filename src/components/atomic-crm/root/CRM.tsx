@@ -17,8 +17,6 @@ import { OAuthConsentPage } from "@/components/supabase/oauth-consent-page";
 
 import companies from "../companies";
 import contacts from "../contacts";
-import { Dashboard } from "../dashboard/Dashboard";
-import { MobileDashboard } from "../dashboard/MobileDashboard";
 import deals from "../deals";
 import { Layout } from "../layout/Layout";
 import { MobileLayout } from "../layout/MobileLayout";
@@ -71,6 +69,9 @@ import { InsightsShow } from '../insights/InsightsShow';
 import { insightsDataProvider } from '../insights/insightsDataProvider';
 import { createWrappedDataProvider } from '../insights/wrappedDataProvider';
 // ── END CUSTOM ───────────────────────────────────────────
+// ── HID HUB: delivery cockpit (landing dashboard) ─────────
+import { ProjectsCockpit } from '../projects/ProjectsCockpit';
+// ── END HID HUB ───────────────────────────────────────────
 
 const defaultStore = localStorageStore(undefined, "CRM");
 
@@ -261,7 +262,7 @@ const DesktopAdmin = (
   return (
     <Admin
       layout={props.layout ?? Layout}
-      dashboard={props.dashboard ?? Dashboard}
+      dashboard={props.dashboard ?? ProjectsCockpit}
       {...props}
     >
       <CustomRoutes noLayout>
@@ -341,7 +342,7 @@ const MobileAdmin = (
       <Admin
         queryClient={queryClient}
         layout={props.layout ?? MobileLayout}
-        dashboard={props.dashboard ?? MobileDashboard}
+        dashboard={props.dashboard ?? ProjectsCockpit}
         {...props}
       >
         <CustomRoutes noLayout>
