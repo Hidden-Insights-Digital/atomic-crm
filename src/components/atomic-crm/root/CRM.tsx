@@ -303,6 +303,11 @@ const DesktopAdmin = (
       {/* ── END CUSTOM ── */}
       <Resource name="sales" {...sales} />
       <Resource name="tags" />
+      {/* ── HID HUB: delivery cockpit resources (over the CRM's own DB) ── */}
+      <Resource name="projects" recordRepresentation="name" />
+      <Resource name="project_steps" />
+      <Resource name="activity" />
+      {/* ── END HID HUB ── */}
     </Admin>
   );
 };
@@ -371,6 +376,11 @@ const MobileAdmin = (
         <Resource name="companies" list={CompanyListMobile} show={CompanyShow} />
         {/* END HID COMPANY APP */}
         <Resource name="tasks" list={MobileTasksList} />
+        {/* ── HID HUB: delivery cockpit resources (Adrian's mobile path) ── */}
+        <Resource name="projects" recordRepresentation="name" />
+        <Resource name="project_steps" />
+        <Resource name="activity" />
+        {/* ── END HID HUB ── */}
       </Admin>
     </PersistQueryClientProvider>
   );
