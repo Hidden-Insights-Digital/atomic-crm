@@ -7,7 +7,6 @@
 .hid-cockpit {
   --surface: #ffffff;
   --surface-2: #f3f6fa;
-  --board: #eaeef3;
   --ink: #0f172a;
   --ink-2: #4a5a70;
   --ink-3: #8595aa;
@@ -27,12 +26,11 @@
   --radius: 12px;
   --radius-sm: 8px;
 
-  /* Self-contained board surface so white cards separate from the CRM's
-     white content area in light mode (and layer cleanly in dark). */
-  background: var(--board);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px 20px 40px;
+  /* Float the board straight on the app background (slate-50 / slate-950);
+     cards and metrics lift via their own border + shadow. Cleaner and less
+     boxed-in than wrapping everything in a grey panel. */
+  background: transparent;
+  padding: 4px 0 40px;
   color: var(--ink);
   font-size: 15px;
   line-height: 1.55;
@@ -41,7 +39,6 @@
 .dark .hid-cockpit {
   --surface: #161f33;
   --surface-2: #1c2740;
-  --board: #0c1322;
   --ink: #e7edf6;
   --ink-2: #9db0c7;
   --ink-3: #62748d;
