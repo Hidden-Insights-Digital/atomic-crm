@@ -44,6 +44,28 @@ export interface Project {
   steps: Step[];
 }
 
+export interface Activity {
+  id: number;
+  source: string;
+  external_id: string;
+  kind: string | null; // call | chat | email | form | ticket
+  subject: string | null;
+  status: string | null;
+  contact_email: string | null;
+  contact_phone: string | null;
+  company_id: number | null;
+  occurred_at: string | null;
+  web_url: string | null;
+}
+
+export interface Deal {
+  id: number;
+  amount: number | null;
+  stage: string | null;
+  expected_closing_date: string | null;
+  created_at: string | null;
+}
+
 // kind -> human label (Zoho activity feed, used by the activity screen)
 export const KIND_LABEL: Record<string, string> = {
   call: 'Call',

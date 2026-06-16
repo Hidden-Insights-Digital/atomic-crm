@@ -69,8 +69,9 @@ import { InsightsShow } from '../insights/InsightsShow';
 import { insightsDataProvider } from '../insights/insightsDataProvider';
 import { createWrappedDataProvider } from '../insights/wrappedDataProvider';
 // ── END CUSTOM ───────────────────────────────────────────
-// ── HID HUB: delivery cockpit (landing dashboard) ─────────
+// ── HID HUB: delivery cockpit (landing dashboard) + project detail ─────────
 import { ProjectsCockpit } from '../projects/ProjectsCockpit';
+import { ProjectShow } from '../projects/ProjectShow';
 // ── END HID HUB ───────────────────────────────────────────
 
 const defaultStore = localStorageStore(undefined, "CRM");
@@ -305,7 +306,7 @@ const DesktopAdmin = (
       <Resource name="sales" {...sales} />
       <Resource name="tags" />
       {/* ── HID HUB: delivery cockpit resources (over the CRM's own DB) ── */}
-      <Resource name="projects" recordRepresentation="name" />
+      <Resource name="projects" show={ProjectShow} recordRepresentation="name" />
       <Resource name="project_steps" />
       <Resource name="activity" />
       {/* ── END HID HUB ── */}
@@ -378,7 +379,7 @@ const MobileAdmin = (
         {/* END HID COMPANY APP */}
         <Resource name="tasks" list={MobileTasksList} />
         {/* ── HID HUB: delivery cockpit resources (Adrian's mobile path) ── */}
-        <Resource name="projects" recordRepresentation="name" />
+        <Resource name="projects" show={ProjectShow} recordRepresentation="name" />
         <Resource name="project_steps" />
         <Resource name="activity" />
         {/* ── END HID HUB ── */}
