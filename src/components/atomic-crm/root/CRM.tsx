@@ -17,8 +17,6 @@ import { OAuthConsentPage } from "@/components/supabase/oauth-consent-page";
 
 import companies from "../companies";
 import contacts from "../contacts";
-import { Dashboard } from "../dashboard/Dashboard";
-import { MobileDashboard } from "../dashboard/MobileDashboard";
 import deals from "../deals";
 import { Layout } from "../layout/Layout";
 import { MobileLayout } from "../layout/MobileLayout";
@@ -71,6 +69,11 @@ import { InsightsShow } from '../insights/InsightsShow';
 import { insightsDataProvider } from '../insights/insightsDataProvider';
 import { createWrappedDataProvider } from '../insights/wrappedDataProvider';
 // ── END CUSTOM ───────────────────────────────────────────
+// ── HID HUB: delivery cockpit (landing dashboard) + project detail ─────────
+import { ProjectsCockpit } from '../projects/ProjectsCockpit';
+import { ProjectShow } from '../projects/ProjectShow';
+import { ActivityPage } from '../feed/ZohoActivityList';
+// ── END HID HUB ───────────────────────────────────────────
 
 const defaultStore = localStorageStore(undefined, "CRM");
 
@@ -261,7 +264,7 @@ const DesktopAdmin = (
   return (
     <Admin
       layout={props.layout ?? Layout}
-      dashboard={props.dashboard ?? Dashboard}
+      dashboard={props.dashboard ?? ProjectsCockpit}
       {...props}
     >
       <CustomRoutes noLayout>
@@ -303,6 +306,11 @@ const DesktopAdmin = (
       {/* ── END CUSTOM ── */}
       <Resource name="sales" {...sales} />
       <Resource name="tags" />
+      {/* ── HID HUB: delivery cockpit resources (over the CRM's own DB) ── */}
+      <Resource name="projects" show={ProjectShow} recordRepresentation="name" />
+      <Resource name="project_steps" />
+      <Resource name="activity" list={ActivityPage} />
+      {/* ── END HID HUB ── */}
     </Admin>
   );
 };
@@ -336,7 +344,7 @@ const MobileAdmin = (
       <Admin
         queryClient={queryClient}
         layout={props.layout ?? MobileLayout}
-        dashboard={props.dashboard ?? MobileDashboard}
+        dashboard={props.dashboard ?? ProjectsCockpit}
         {...props}
       >
         <CustomRoutes noLayout>
@@ -371,6 +379,11 @@ const MobileAdmin = (
         <Resource name="companies" list={CompanyListMobile} show={CompanyShow} />
         {/* END HID COMPANY APP */}
         <Resource name="tasks" list={MobileTasksList} />
+        {/* ── HID HUB: delivery cockpit resources (Adrian's mobile path) ── */}
+        <Resource name="projects" show={ProjectShow} recordRepresentation="name" />
+        <Resource name="project_steps" />
+        <Resource name="activity" list={ActivityPage} />
+        {/* ── END HID HUB ── */}
       </Admin>
     </PersistQueryClientProvider>
   );

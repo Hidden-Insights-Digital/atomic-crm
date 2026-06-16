@@ -1,0 +1,769 @@
+/* HID delivery cockpit — the landing dashboard of the unified CRM.
+   Slate ink, amber signature accent. Every token and rule is scoped under
+   `.hid-cockpit` so the hub's design tokens (--surface, --border, --brand …)
+   never leak into the CRM's shadcn tokens. Dark mode follows the CRM's own
+   `.dark` class (set on <html> by the theme provider). */
+
+.hid-cockpit {
+  --surface: #ffffff;
+  --surface-2: #f3f6fa;
+  --ink: #0f172a;
+  --ink-2: #4a5a70;
+  --ink-3: #8595aa;
+  --border: #e1e7ef;
+  --border-2: #cdd6e2;
+  --brand: #f59e0b;
+  --brand-strong: #b45309;
+  --brand-soft: #fdf2e0;
+  --done: #0e9f6e;
+  --done-strong: #047857;
+  --done-soft: #e7f7f0;
+  --alert: #e02424;
+  --alert-strong: #b91c1c;
+  --alert-soft: #fdecec;
+  --shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 2px 6px rgba(15, 23, 42, 0.05);
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --radius: 12px;
+  --radius-sm: 8px;
+
+  /* Float the board straight on the app background (slate-50 / slate-950);
+     cards and metrics lift via their own border + shadow. Cleaner and less
+     boxed-in than wrapping everything in a grey panel. */
+  background: transparent;
+  padding: 4px 0 40px;
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.dark .hid-cockpit {
+  --surface: #161f33;
+  --surface-2: #1c2740;
+  --ink: #e7edf6;
+  --ink-2: #9db0c7;
+  --ink-3: #62748d;
+  --border: #283450;
+  --border-2: #38496a;
+  --brand: #f59e0b;
+  --brand-strong: #fbbf24;
+  --brand-soft: rgba(245, 158, 11, 0.13);
+  --done: #10b981;
+  --done-strong: #34d399;
+  --done-soft: rgba(16, 185, 129, 0.15);
+  --alert: #ef4444;
+  --alert-strong: #f87171;
+  --alert-soft: rgba(239, 68, 68, 0.15);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.22);
+}
+
+/* Page head ----------------------------------------------------------------*/
+.hid-cockpit .pagehead {
+  margin-bottom: 20px;
+}
+.hid-cockpit .pagehead h1 {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.hid-cockpit .pagehead p {
+  color: var(--ink-2);
+  font-size: 14px;
+  margin-top: 2px;
+}
+.hid-cockpit .section-label {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-weight: 500;
+  margin: 26px 0 11px;
+}
+
+/* Metrics ------------------------------------------------------------------*/
+.hid-cockpit .metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+.hid-cockpit .metric {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+}
+.hid-cockpit .metric-label {
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+.hid-cockpit .metric-value {
+  font-family: var(--mono);
+  font-size: 25px;
+  font-weight: 500;
+  margin-top: 4px;
+  letter-spacing: -0.01em;
+}
+.hid-cockpit .metric-value .unit {
+  font-size: 14px;
+  color: var(--ink-3);
+  margin-left: 2px;
+}
+
+/* Blocking list ------------------------------------------------------------*/
+.hid-cockpit .blocker-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--alert);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 11px 15px;
+  margin-bottom: 9px;
+}
+.hid-cockpit .blocker-row.ok {
+  border-left-color: var(--done);
+}
+.hid-cockpit .blocker-row .who {
+  font-weight: 600;
+  font-size: 13.5px;
+  min-width: 132px;
+}
+.hid-cockpit .blocker-row .what {
+  flex: 1;
+  color: var(--ink-2);
+  font-size: 13.5px;
+}
+.hid-cockpit .blocker-row .what .ico {
+  color: var(--alert);
+  vertical-align: -3px;
+  margin-right: 6px;
+}
+.hid-cockpit .blocker-row.ok .what .ico {
+  color: var(--done);
+}
+.hid-cockpit .owner-pill {
+  font-size: 12px;
+  color: var(--ink-2);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px 10px;
+  white-space: nowrap;
+}
+.hid-cockpit .age {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--alert-strong);
+  white-space: nowrap;
+  min-width: 64px;
+  text-align: right;
+}
+
+/* Project card -------------------------------------------------------------*/
+.hid-cockpit .card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px 20px 20px;
+  margin-bottom: 16px;
+}
+.hid-cockpit .card-head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-bottom: 4px;
+}
+.hid-cockpit .proj-name {
+  font-size: 16.5px;
+  font-weight: 600;
+  margin: 0;
+}
+.hid-cockpit .status-pill {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 2px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--border-2);
+  color: var(--ink-2);
+}
+.hid-cockpit .status-pill.live {
+  color: var(--done-strong);
+  border-color: var(--done);
+  background: var(--done-soft);
+}
+.hid-cockpit .card-head .spacer {
+  flex: 1;
+}
+.hid-cockpit .links {
+  display: flex;
+  gap: 14px;
+}
+.hid-cockpit .link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--brand-strong);
+  text-decoration: none;
+  font-size: 13px;
+}
+.hid-cockpit .link:hover {
+  text-decoration: underline;
+}
+.hid-cockpit .progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0 16px;
+}
+.hid-cockpit .progressbar {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.hid-cockpit .progressbar > span {
+  display: block;
+  height: 100%;
+  background: var(--brand);
+  transition: width 0.4s ease;
+}
+.hid-cockpit .progress-count {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.hid-cockpit .progress-count b {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Blocker line inside card */
+.hid-cockpit .cardblocker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--alert-strong);
+  margin: -4px 0 14px;
+}
+.hid-cockpit .cardblocker.ok {
+  color: var(--done-strong);
+}
+.hid-cockpit .cardblocker .age {
+  text-align: left;
+  min-width: 0;
+}
+
+/* Stage rail (the signature) ----------------------------------------------*/
+.hid-cockpit .phases {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 22px;
+}
+.hid-cockpit .phase {
+  white-space: nowrap;
+}
+.hid-cockpit .phase-label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin-bottom: 7px;
+}
+.hid-cockpit .chips {
+  display: flex;
+  gap: 6px;
+}
+.hid-cockpit .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 6px 11px 6px 9px;
+  border-radius: 9px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: background 0.16s, border-color 0.16s, color 0.16s, transform 0.08s;
+}
+.hid-cockpit .chip:hover {
+  border-color: var(--border-2);
+  color: var(--ink-2);
+}
+.hid-cockpit .chip:active {
+  transform: scale(0.97);
+}
+.hid-cockpit .chip .node {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 1.6px solid currentColor;
+  color: var(--ink-2);
+  flex-shrink: 0;
+}
+.hid-cockpit .chip.is-done {
+  background: var(--done-soft);
+  border-color: var(--done);
+  color: var(--done-strong);
+}
+.hid-cockpit .chip.is-done .node {
+  background: var(--done);
+  border-color: var(--done);
+  color: #fff;
+}
+.hid-cockpit .chip.is-current {
+  background: var(--brand-soft);
+  border-color: var(--brand);
+  color: var(--brand-strong);
+  box-shadow: 0 0 0 1px var(--brand);
+}
+.hid-cockpit .chip.is-current .node {
+  color: var(--brand-strong);
+  border-color: var(--brand);
+  animation: hid-cockpit-pulse 2s ease-in-out infinite;
+}
+@keyframes hid-cockpit-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--brand-soft); }
+  50% { box-shadow: 0 0 0 4px var(--brand-soft); }
+}
+
+/* Cockpit → detail affordances --------------------------------------------*/
+.hid-cockpit .proj-name-btn {
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+.hid-cockpit .proj-name-btn:hover {
+  color: var(--brand-strong);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.hid-cockpit .link-btn {
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* States -------------------------------------------------------------------*/
+.hid-cockpit .center {
+  display: grid;
+  place-items: center;
+  min-height: 40vh;
+  color: var(--ink-3);
+  font-size: 14px;
+}
+.hid-cockpit .errbox {
+  background: var(--alert-soft);
+  border: 1px solid var(--alert);
+  color: var(--alert-strong);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  font-size: 13.5px;
+}
+
+/* Focus --------------------------------------------------------------------*/
+.hid-cockpit :focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+.hid-cockpit button,
+.hid-cockpit a,
+.hid-cockpit [role="button"] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hid-cockpit * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .hid-cockpit .blocker-row {
+    flex-wrap: wrap;
+    gap: 4px 10px;
+  }
+  .hid-cockpit .blocker-row .who {
+    min-width: 0;
+    width: 100%;
+  }
+  .hid-cockpit .blocker-row .what {
+    flex-basis: 100%;
+    order: 3;
+  }
+  .hid-cockpit .blocker-row .owner-pill {
+    order: 4;
+  }
+  .hid-cockpit .blocker-row .age {
+    order: 4;
+    margin-left: auto;
+  }
+}
+
+/* ========================================================================== */
+/* Project detail (ProjectShow)                                               */
+/* ========================================================================== */
+
+.hid-cockpit .back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: none;
+  padding: 4px 0;
+  margin-bottom: 8px;
+  font: inherit;
+  font-size: 13.5px;
+  color: var(--ink-2);
+  text-decoration: none;
+  cursor: pointer;
+}
+.hid-cockpit .back-link:hover {
+  color: var(--brand-strong);
+}
+.hid-cockpit .detail-head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-bottom: 16px;
+}
+.hid-cockpit .detail-head h1 {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.hid-cockpit .facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  margin: 18px 0;
+}
+.hid-cockpit .fact {
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  padding: 11px 14px;
+}
+.hid-cockpit .fact-label {
+  font-size: 12px;
+  color: var(--ink-2);
+}
+.hid-cockpit .fact-value {
+  font-size: 15px;
+  font-weight: 500;
+  margin-top: 2px;
+  word-break: break-word;
+}
+
+.hid-cockpit .blocker-editor {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 22px;
+}
+.hid-cockpit .blocker-editor label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-2);
+  margin-bottom: 8px;
+}
+.hid-cockpit .blocker-editor label svg {
+  color: var(--alert);
+}
+.hid-cockpit .blocker-editor textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 44px;
+  padding: 9px 11px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-2);
+  background: var(--surface-2);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+}
+.hid-cockpit .blocker-editor textarea:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand-soft);
+}
+.hid-cockpit .blocker-editor-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 9px;
+}
+.hid-cockpit .blocker-editor-foot .hint {
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+.hid-cockpit .btn-save {
+  height: 32px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 8px;
+  background: var(--brand);
+  color: #1c1206;
+  font: inherit;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+}
+.hid-cockpit .btn-save:disabled {
+  background: var(--surface-2);
+  color: var(--ink-3);
+  cursor: default;
+}
+
+.hid-cockpit .phase-group {
+  margin-bottom: 18px;
+}
+.hid-cockpit .step-row {
+  display: flex;
+  gap: 13px;
+  padding: 12px 2px;
+  border-top: 1px solid var(--border);
+}
+.hid-cockpit .phase-group .step-row:first-of-type {
+  border-top: none;
+}
+.hid-cockpit .step-toggle {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 2px solid var(--border-2);
+  background: var(--surface);
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: background 0.16s, border-color 0.16s, box-shadow 0.16s;
+}
+.hid-cockpit .step-toggle:hover {
+  border-color: var(--ink-3);
+}
+.hid-cockpit .step-row.is-done .step-toggle {
+  background: var(--done);
+  border-color: var(--done);
+  color: #fff;
+}
+.hid-cockpit .step-row.is-current .step-toggle {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand-soft);
+}
+.hid-cockpit .step-body {
+  flex: 1;
+  min-width: 0;
+}
+.hid-cockpit .step-head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
+.hid-cockpit .step-label {
+  font-size: 14.5px;
+  font-weight: 500;
+}
+.hid-cockpit .step-row.is-current .step-label {
+  color: var(--brand-strong);
+}
+.hid-cockpit .step-meta {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--ink-2);
+}
+.hid-cockpit .step-def {
+  font-size: 13px;
+  color: var(--ink-2);
+  margin: 2px 0 7px;
+}
+.hid-cockpit .step-note {
+  width: 100%;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+}
+.hid-cockpit .step-note::placeholder {
+  color: var(--ink-3);
+}
+.hid-cockpit .step-note:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand-soft);
+  background: var(--surface-2);
+}
+
+/* Money + ops strip (detail) */
+.hid-cockpit .moneyops {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin: -4px 0 18px;
+}
+.hid-cockpit .pay-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border-2);
+  background: var(--surface);
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.16s, color 0.16s, border-color 0.16s;
+}
+.hid-cockpit .pay-toggle:hover {
+  border-color: var(--ink-3);
+  color: var(--ink);
+}
+.hid-cockpit .pay-toggle.is-paid {
+  background: var(--done-soft);
+  border-color: var(--done);
+  color: var(--done-strong);
+}
+.hid-cockpit .site-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+.hid-cockpit .site-status .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--ink-3);
+}
+.hid-cockpit .site-status.up {
+  color: var(--done-strong);
+}
+.hid-cockpit .site-status.up .dot {
+  background: var(--done);
+}
+.hid-cockpit .site-status.down {
+  color: var(--alert-strong);
+}
+.hid-cockpit .site-status.down .dot {
+  background: var(--alert);
+}
+
+/* ========================================================================== */
+/* Zoho activity feed                                                         */
+/* ========================================================================== */
+
+.hid-cockpit .activity-feed {
+  display: flex;
+  flex-direction: column;
+}
+.hid-cockpit .activity-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 6px;
+  border-top: 1px solid var(--border);
+  text-decoration: none;
+  color: inherit;
+}
+.hid-cockpit .activity-feed .activity-item:first-child {
+  border-top: none;
+}
+.hid-cockpit .activity-item:hover {
+  background: var(--surface-2);
+}
+.hid-cockpit .activity-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+}
+.hid-cockpit .kind-call .activity-icon {
+  color: var(--brand-strong);
+}
+.hid-cockpit .kind-chat .activity-icon,
+.hid-cockpit .kind-form .activity-icon {
+  color: var(--done-strong);
+}
+.hid-cockpit .activity-main {
+  flex: 1;
+  min-width: 0;
+}
+.hid-cockpit .activity-subject {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hid-cockpit .activity-meta {
+  display: block;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hid-cockpit .activity-when {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-2);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.hid-cockpit .activity-ext {
+  color: var(--ink-3);
+  flex-shrink: 0;
+  display: inline-flex;
+}
+.hid-cockpit .activity-item:hover .activity-ext {
+  color: var(--brand-strong);
+}
+.hid-cockpit .activity-empty {
+  color: var(--ink-2);
+  font-size: 14px;
+  padding: 14px 6px;
+}
