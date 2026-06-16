@@ -18,6 +18,10 @@ const Header = () => {
   let currentPath: string | boolean = "/";
   if (matchPath("/", location.pathname)) {
     currentPath = "/";
+  // ── HID HUB: Activity feed path detection ────────────────
+  } else if (matchPath("/activity/*", location.pathname)) {
+    currentPath = "/activity";
+  // ── END HID HUB ──────────────────────────────────────────
   } else if (matchPath("/contacts/*", location.pathname)) {
     currentPath = "/contacts";
   } else if (matchPath("/companies/*", location.pathname)) {
@@ -60,11 +64,18 @@ const Header = () => {
               </Link>
               <div>
                 <nav className="flex">
+                  {/* ── HID HUB: Cockpit + Activity tabs (delivery hub) ── */}
                   <NavigationTab
-                    label={translate("ra.page.dashboard")}
+                    label="Cockpit"
                     to="/"
                     isActive={currentPath === "/"}
                   />
+                  <NavigationTab
+                    label="Activity"
+                    to="/activity"
+                    isActive={currentPath === "/activity"}
+                  />
+                  {/* ── END HID HUB ── */}
                   <NavigationTab
                     label={translate("resources.contacts.name", {
                       smart_count: 2,

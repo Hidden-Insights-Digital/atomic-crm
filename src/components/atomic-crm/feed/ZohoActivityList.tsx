@@ -2,6 +2,7 @@ import { useGetList } from 'ra-core';
 import { ExternalLink, FileText, Mail, MessageSquare, Phone } from 'lucide-react';
 
 import { KIND_LABEL, type Activity } from '../projects/types';
+import '../projects/cockpit.css';
 
 // Keep persisted (PWA) caches honest, same posture as the cockpit.
 const FRESH = { staleTime: 30_000, refetchOnWindowFocus: true } as const;
@@ -77,9 +78,9 @@ export function ActivityFeed({ items, empty }: { items: Activity[]; empty?: stri
  * - `companyId={null}` (a project with no linked company) shows nothing.
  * - `companyId` omitted = the full cross-client feed.
  *
- * Today the only call site is inside ProjectShow's `.hid-cockpit` wrapper. The
- * standalone full-feed route lands in Phase 5; whoever wires it must render this
- * inside a `.hid-cockpit` element, since the `.activity-*` styles are scoped to it.
+ * The standalone full-feed route is `ActivityPage` below, which wraps this in a
+ * `.hid-cockpit` element (the `.activity-*` styles are scoped to it); the project
+ * detail embeds it directly inside its own `.hid-cockpit` wrapper.
  */
 export const ZohoActivityList = ({
   companyId,
@@ -108,3 +109,17 @@ export const ZohoActivityList = ({
 
   return <ActivityFeed items={data ?? []} empty={empty} />;
 };
+
+/**
+ * Full-page activity route — the `activity` resource `list`. The whole
+ * cross-client Zoho feed, wrapped in `.hid-cockpit` so the feed styles apply.
+ */
+export const ActivityPage = () => (
+  <div className="hid-cockpit">
+    <div className="pagehead">
+      <h1>Activity</h1>
+      <p>Calls, chats, emails and form leads across every client.</p>
+    </div>
+    <ZohoActivityList empty="No activity yet." />
+  </div>
+);

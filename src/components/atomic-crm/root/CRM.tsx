@@ -72,6 +72,7 @@ import { createWrappedDataProvider } from '../insights/wrappedDataProvider';
 // ── HID HUB: delivery cockpit (landing dashboard) + project detail ─────────
 import { ProjectsCockpit } from '../projects/ProjectsCockpit';
 import { ProjectShow } from '../projects/ProjectShow';
+import { ActivityPage } from '../feed/ZohoActivityList';
 // ── END HID HUB ───────────────────────────────────────────
 
 const defaultStore = localStorageStore(undefined, "CRM");
@@ -308,7 +309,7 @@ const DesktopAdmin = (
       {/* ── HID HUB: delivery cockpit resources (over the CRM's own DB) ── */}
       <Resource name="projects" show={ProjectShow} recordRepresentation="name" />
       <Resource name="project_steps" />
-      <Resource name="activity" />
+      <Resource name="activity" list={ActivityPage} />
       {/* ── END HID HUB ── */}
     </Admin>
   );
@@ -381,7 +382,7 @@ const MobileAdmin = (
         {/* ── HID HUB: delivery cockpit resources (Adrian's mobile path) ── */}
         <Resource name="projects" show={ProjectShow} recordRepresentation="name" />
         <Resource name="project_steps" />
-        <Resource name="activity" />
+        <Resource name="activity" list={ActivityPage} />
         {/* ── END HID HUB ── */}
       </Admin>
     </PersistQueryClientProvider>

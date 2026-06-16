@@ -6,9 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-// HID COMPANIES APP: Replace Home with Building for Companies nav
-import { Building, ListTodo, Plus, Settings, Users } from "lucide-react";
-// END HID COMPANIES APP
+import { Building, LayoutDashboard, ListTodo, Plus, Settings } from "lucide-react";
 import { useTranslate } from "ra-core";
 import { Link, matchPath, useLocation, useMatch } from "react-router";
 import { ContactCreateSheet } from "../contacts/ContactCreateSheet";
@@ -20,15 +18,16 @@ export const MobileNavigation = () => {
   const location = useLocation();
   const translate = useTranslate();
 
-  // HID COMPANIES APP: Default to /companies instead of dashboard
-  let currentPath: string | boolean = "/companies";
-  if (matchPath("/contacts/*", location.pathname)) {
-    currentPath = "/contacts";
-  // END HID COMPANIES APP  
+  // HID HUB: the cockpit (/) is the mobile home now.
+  let currentPath: string | boolean = false;
+  if (matchPath("/", location.pathname)) {
+    currentPath = "/";
   } else if (matchPath("/companies/*", location.pathname)) {
     currentPath = "/companies";
   } else if (matchPath("/tasks/*", location.pathname)) {
     currentPath = "/tasks";
+  } else if (matchPath("/contacts/*", location.pathname)) {
+    currentPath = "/contacts";
   } else if (matchPath("/deals/*", location.pathname)) {
     currentPath = "/deals";
   } else {
@@ -56,21 +55,18 @@ export const MobileNavigation = () => {
     >
       <div className="flex justify-center">
         <>
-          {/* HID COMPANIES APP: Companies button replaces Home/Dashboard */}
+          {/* HID HUB: Cockpit (/) is the mobile home */}
+          <NavigationButton
+            href="/"
+            Icon={LayoutDashboard}
+            label="Cockpit"
+            isActive={currentPath === "/"}
+          />
           <NavigationButton
             href="/companies"
             Icon={Building}
             label={translate("resources.companies.name", { smart_count: 2 })}
             isActive={currentPath === "/companies"}
-          />
-          {/* END HID COMPANIES APP */}
-          <NavigationButton
-            href="/contacts"
-            Icon={Users}
-            label={translate("resources.contacts.name", {
-              smart_count: 2,
-            })}
-            isActive={currentPath === "/contacts"}
           />
           <CreateButton />
           <NavigationButton
